@@ -40,8 +40,20 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", heartbeat)
 	router.HandleFunc("/newUser", newUser).Methods("POST")
+	router.HandleFunc("/getUsers", getUsers).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8080", router))
 
+}
+func getUsers(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+	var userList []User
+	var user User
+	query := "SELECT id,age,firstname,lastname,city,email FROM users"
+	iterable := session.Query(query).Iter()
+	for iterable.Scan(&user.ID, &user.Age, &user.FirstName, &user.LastName, &user.City, &user.Email) {
+		userList = append(userList, user)
+	}
+	json.NewEncoder(w).Encode(userList)
 }
 func newUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
