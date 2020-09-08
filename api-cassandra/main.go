@@ -44,13 +44,16 @@ func main() {
 
 }
 func newUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
 	var user User
 	json.NewDecoder(r.Body).Decode(&user)
-	if err := session.Query(`INSERT INTO users (id,age,city,firstname,lastname) VALUES (?,?,?,?,?)`, gocql.TimeUUID(), user.Age, user.City, user.FirstName, user.LastName).Exec(); err != nil {
+	//fmt.Println(user)
+	if err := session.Query(`INSERT INTO users (id,age,city,firstname,lastname,email) VALUES (?,?,?,?,?,?)`, gocql.TimeUUID(), user.Age, user.City, user.FirstName, user.LastName, user.Email).Exec(); err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println("a user is added to DB")
 	json.NewEncoder(w).Encode("you added the user succesully")
+	json.NewEncoder(w).Encode(user)
 
 }
 
