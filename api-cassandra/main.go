@@ -41,7 +41,21 @@ func main() {
 	router.HandleFunc("/", heartbeat)
 	router.HandleFunc("/newUser", newUser).Methods("POST")
 	router.HandleFunc("/getUsers", getUsers).Methods("GET")
+	router.HandleFunc("/getUsers/{ID}", getOneUser).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8080", router))
+
+}
+func getOneUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+	idParam := mux.Vars(r)["ID"]
+	idval, _ := gocql.ParseUUID(idParam)
+	var user User
+	query := `SELECT id,age,firstname,lastname,city,email FROM users WHERE id=?`
+	err := session.Query(query, idval).Scan(&user.ID, &user.Age, &user.FirstName, &user.LastName, &user.City, &user.Email)
+	if err != nil {
+		fmt.Println(err)
+	}
+	json.NewEncoder(w).Encode(user)
 
 }
 func getUsers(w http.ResponseWriter, r *http.Request) {
