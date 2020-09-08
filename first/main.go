@@ -36,12 +36,34 @@ func main() {
 	router.HandleFunc("/posts", getAllPosts).Methods("GET")
 	router.HandleFunc("/posts/{id}", getPost).Methods("GET")
 	router.HandleFunc("/posts/{id}", updatePost).Methods("PUT")
+	router.HandleFunc("/posts/{id}", patchPost).Methods("PATCH")
 	log.Fatal(http.ListenAndServe("localhost:5000", router))
 
 }
 
+func patchPost(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+
+	idParam := mux.Vars(r)["id"]
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		w.WriteHeader(400)
+		w.Write([]byte("error"))
+		return
+	}
+	if id >= len(posts) { //error checking
+		w.WriteHeader(404)
+		w.Write([]byte("no post found with specified id"))
+		return
+	}
+	post := &posts[id]
+	json.NewDecoder(r.Body).Decode(post)
+	json.NewEncoder(w).Encode(post)
+
+}
+
 func updatePost(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("content-type", "appliaction/json")
+	w.Header().Set("content-type", "application/json")
 
 	idParam := mux.Vars(r)["id"]
 	id, err := strconv.Atoi(idParam)
