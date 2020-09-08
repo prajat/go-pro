@@ -37,7 +37,27 @@ func main() {
 	router.HandleFunc("/posts/{id}", getPost).Methods("GET")
 	router.HandleFunc("/posts/{id}", updatePost).Methods("PUT")
 	router.HandleFunc("/posts/{id}", patchPost).Methods("PATCH")
+	router.HandleFunc("/posts/{id}", deletePost).Methods("DELETE")
 	log.Fatal(http.ListenAndServe("localhost:5000", router))
+
+}
+
+func deletePost(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+	idParam := mux.Vars(r)["id"]
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		w.WriteHeader(400)
+		w.Write([]byte("error"))
+		return
+	}
+	if id >= len(posts) { //error checking
+		w.WriteHeader(404)
+		w.Write([]byte("no post found with specified id"))
+		return
+	}
+	posts = append(posts[:id], posts[id+1:]...) //delete the post from slice using a trick
+	w.WriteHeader(200)
 
 }
 
