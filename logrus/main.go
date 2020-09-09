@@ -6,10 +6,12 @@ import (
 
 func main() {
 
+	//example1
 	log.WithFields(log.Fields{
 		"animal": "walrus",
 	}).Info("A walrus appears")
 
+	//example2
 	var err error
 	log.WithFields(log.Fields{
 		"error":       err,
