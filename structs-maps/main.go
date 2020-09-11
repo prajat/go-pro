@@ -24,8 +24,8 @@ func main() {
 			name: "shabana",
 		},
 		{
-			id:   3,
-			name: "spalzes",
+			id:   5,
+			name: "shivam",
 		},
 	}
 
@@ -42,8 +42,8 @@ func main() {
 			resultFollowsyou = append(resultFollowsyou, k)
 		}
 	}
-	fmt.Println(resultFollowing)
-	fmt.Println(resultFollowers)
+	// fmt.Println(resultFollowing)
+	// fmt.Println(resultFollowers)
 
 	fmt.Println(resultFollowsyou)
 }
