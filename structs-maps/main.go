@@ -20,11 +20,11 @@ func main() {
 	}
 	resultFollowing := []UserProfile{
 		{
-			id:   2,
+			id:   1,
 			name: "shabana",
 		},
 		{
-			id:   5,
+			id:   3,
 			name: "shivam",
 		},
 	}
@@ -39,11 +39,12 @@ func main() {
 		_, ok := m[k.id]
 		//fmt.Println(ansuser)
 		if !ok {
+			fmt.Println(k)
 			resultFollowsyou = append(resultFollowsyou, k)
 		}
 	}
-	// fmt.Println(resultFollowing)
-	// fmt.Println(resultFollowers)
+	fmt.Println(resultFollowing)
+	fmt.Println(resultFollowers)
 
 	fmt.Println(resultFollowsyou)
 }
